@@ -33,9 +33,9 @@ export default function StudentDashboard() {
       />
       <ErrorMessage message={error} />
 
-      <section className="mb-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <section className="mb-6 grid grid-cols-2 gap-3 xl:grid-cols-4">
         {stats.map(([label, key, suffix]) => (
-          <div key={key} className="rounded border border-slate-200 bg-white p-5">
+          <div key={key} className="rounded border border-slate-200 bg-white p-4">
             <p className="text-sm text-slate-500">{label}</p>
             <p className="mt-1 text-3xl font-bold">
               {data.statistics[key]}

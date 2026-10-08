@@ -24,6 +24,7 @@ export default function StudentExams() {
   }, []);
 
   const start = async (exam) => {
+    if (!window.confirm(`Start or resume ${exam.title}? Duration: ${exam.durationMinutes} minutes. The timer continues if you leave the page. Make sure you have a stable connection.`)) return;
     setStarting(exam.id);
     setError("");
     try {
@@ -62,6 +63,7 @@ export default function StudentExams() {
                 <dd className="font-semibold">{exam.questionCount}</dd>
               </div>
             </dl>
+            <div className="mt-4 space-y-1 text-xs text-slate-600"><p>Opens: {new Date(exam.opensAt).toLocaleString()}</p><p>Closes: {new Date(exam.closesAt).toLocaleString()}</p><p>Times shown in your local timezone.</p></div>
 
             <button
               onClick={() => start(exam)}
@@ -82,3 +84,4 @@ export default function StudentExams() {
     </>
   );
 }
+

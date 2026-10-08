@@ -13,12 +13,16 @@ import StudentExams from "./components/StudentExams.jsx";
 import TakeExam from "./components/TakeExam.jsx";
 import StudentResults from "./components/StudentResults.jsx";
 import StudentProfile from "./components/StudentProfile.jsx";
+import { AuthProvider, Login, Protected } from "./components/Auth.jsx";
+import PortalLayout from "./components/PortalLayout.jsx";
 
 export default function App() {
   return (
     <BrowserRouter>
+      <AuthProvider>
       <Routes>
-        <Route path="/teacher" element={<TeacherLayout />}>
+        <Route path="/login" element={<Login />} />
+        <Route path="/teacher" element={<Protected role="teacher"><PortalLayout role="teacher" /></Protected>}>
           <Route index element={<TeacherDashboard />} />
           <Route path="questions" element={<QuestionBank />} />
           <Route path="exams" element={<TeacherExams />} />
@@ -27,16 +31,17 @@ export default function App() {
           <Route path="results" element={<TeacherReports />} />
           <Route path="settings" element={<TeacherSettings />} />
         </Route>
-        <Route path="/student" element={<StudentLayout />}>
+        <Route path="/student" element={<Protected role="student"><PortalLayout role="student" /></Protected>}>
         <Route index element={<StudentDashboard />} />
         <Route path="exams" element={<StudentExams />} />
         <Route path="exams/:attemptId" element={<TakeExam />} />
         <Route path="results" element={<StudentResults />}/>
         <Route path="profile" element={<StudentProfile />}/>
         </Route>
-        <Route path="/" element={<Navigate to="/teacher" replace />} />
-        <Route path="*" element={<Navigate to="/teacher" replace />} />
+        <Route path="/" element={<Navigate to="/login" replace />} />
+        <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
+      </AuthProvider>
     </BrowserRouter>
   );
 }

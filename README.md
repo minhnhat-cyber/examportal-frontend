@@ -58,7 +58,7 @@ ExamPortal is an online multiple-choice examination management system for teache
 2. Create `.env.development`:
 
    ```env
-   VITE_API_URL=http://localhost:3000
+   VITE_API_URL=http://localhost:3000/backend
    ```
 
 3. Start the development server:
@@ -69,7 +69,9 @@ ExamPortal is an online multiple-choice examination management system for teache
 
 4. Open `http://localhost:5173`.
 
-The teacher portal is available at `/teacher`, and the student portal is available at `/student`.
+Sign in at `/login`. Your account role opens the teacher portal at `/teacher` or the student portal at `/student`. The navigation shows the signed-in account and includes a working logout button. On mobile, use Menu to expand navigation.
+
+For seeded demonstration accounts, see the API README. Change demo passwords before real use. Exam cards show local opening/closing times and ask for confirmation before starting or resuming. Teachers can search the question selector and see publication-status guidance when editing exams.
 
 ## Production build
 

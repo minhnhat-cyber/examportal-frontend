@@ -1,0 +1,11 @@
+import { useState } from "react";
+import { NavLink, Outlet } from "react-router-dom";
+import { useAuth } from "./Auth";
+import { apiFetch } from "../lib/api";
+const menus={teacher:[["Dashboard",""],["Exams","exams"],["Question Bank","questions"],["Students","students"],["Attempts","attempts"],["Results","results"],["Settings","settings"]],student:[["Dashboard",""],["Exams","exams"],["Results","results"],["Profile","profile"]]};
+export default function PortalLayout({role}){
+  const {user,setUser}=useAuth();const [open,setOpen]=useState(false),[busy,setBusy]=useState(false),[error,setError]=useState("");
+  const logout=async()=>{setBusy(true);setError("");try{await apiFetch("/api/auth/logout",{method:"POST"});setUser(null)}catch(e){setError(e.message)}finally{setBusy(false)}};
+  return <div className="min-h-screen bg-slate-50 text-slate-900 md:grid md:grid-cols-[250px_1fr]"><aside className="bg-blue-700 p-4 text-white md:flex md:min-h-screen md:flex-col md:p-5"><div className="flex items-center justify-between md:mb-8"><div><b className="text-xl">ExamPortal</b><p className="text-sm capitalize text-blue-100">{role} Portal</p></div><button aria-label="Toggle navigation" aria-expanded={open} aria-controls="portal-menu" onClick={()=>setOpen(!open)} className="rounded border border-blue-300 px-3 py-2 md:hidden">{open?"Close":"Menu"}</button></div><div id="portal-menu" className={`${open?"block":"hidden"} mt-4 md:mt-0 md:flex md:flex-1 md:flex-col`}><nav className="grid gap-1">{menus[role].map(([label,path])=><NavLink key={label} to={`/${role}${path?`/${path}`:""}`} end={!path} onClick={()=>setOpen(false)} className={({isActive})=>`rounded px-3 py-3 text-sm font-semibold ${isActive?"bg-white text-blue-700":"hover:bg-blue-600"}`}>{label}</NavLink>)}</nav><div className="mt-6 md:mt-auto"><p className="break-words font-semibold">{user.name}</p><p className="break-all text-xs text-blue-100">{user.email}</p><button onClick={logout} disabled={busy} className="mt-3 rounded border border-blue-300 px-3 py-2 text-sm">{busy?"Signing out…":"Log out"}</button>{error&&<p role="alert" className="mt-2 text-sm">{error}</p>}</div></div></aside><main className="min-w-0 p-4 lg:p-8"><Outlet/></main></div>;
+}
+

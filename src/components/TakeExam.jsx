@@ -5,7 +5,8 @@ import { ErrorMessage, PageHeader } from "./StudentUI";
 
 const letters = ["A", "B", "C", "D"];
 const pad = (n) => String(n).padStart(2, "0");
-const formatClock = (total) => `${pad(Math.floor(total / 60))}:${pad(total % 60)}`;
+const formatClock = (total) =>
+  `${pad(Math.floor(total / 60))}:${pad(total % 60)}`;
 
 export default function TakeExam() {
   const { attemptId } = useParams();
@@ -54,10 +55,12 @@ export default function TakeExam() {
       await apiFetch(`/api/attempts/${attemptId}/submit`, {
         method: "POST",
         body: JSON.stringify({
-          answers: Object.entries(answersRef.current).map(([questionId, selectedOption]) => ({
-            questionId,
-            selectedOption,
-          })),
+          answers: Object.entries(answersRef.current).map(
+            ([questionId, selectedOption]) => ({
+              questionId,
+              selectedOption,
+            }),
+          ),
         }),
       });
       dirty.current = false;
@@ -93,10 +96,12 @@ export default function TakeExam() {
       apiFetch(`/api/attempts/${attemptId}`, {
         method: "PATCH",
         body: JSON.stringify({
-          answers: Object.entries(answers).map(([questionId, selectedOption]) => ({
-            questionId,
-            selectedOption,
-          })),
+          answers: Object.entries(answers).map(
+            ([questionId, selectedOption]) => ({
+              questionId,
+              selectedOption,
+            }),
+          ),
         }),
       })
         .then(() => setSaveState("saved"))
@@ -126,7 +131,10 @@ export default function TakeExam() {
   };
 
   if (loading) return <p className="text-sm text-slate-500">Loading exam…</p>;
-  if (!data) return <ErrorMessage message={error || "This attempt could not be loaded."} />;
+  if (!data)
+    return (
+      <ErrorMessage message={error || "This attempt could not be loaded."} />
+    );
 
   const { exam, questions, attempt } = data;
 
@@ -143,7 +151,10 @@ export default function TakeExam() {
               : `Submitted ${new Date(attempt.submittedAt).toLocaleString()}`
           }
           action={
-            <Link to="/student/results" className="rounded border border-slate-300 px-4 py-2 text-sm font-semibold">
+            <Link
+              to="/student/results"
+              className="rounded border border-slate-300 px-4 py-2 text-sm font-semibold"
+            >
               All results
             </Link>
           }
@@ -153,29 +164,45 @@ export default function TakeExam() {
         <section className="mb-6 grid gap-4 sm:grid-cols-3">
           <div className="rounded border border-violet-200 bg-violet-50 p-5">
             <p className="text-sm text-violet-900">Score</p>
-            <p className="mt-1 text-3xl font-bold text-violet-900">{attempt.percentage}%</p>
+            <p className="mt-1 text-3xl font-bold text-violet-900">
+              {attempt.percentage}%
+            </p>
           </div>
           <div className="rounded border border-slate-200 bg-white p-5">
             <p className="text-sm text-slate-500">Points</p>
             <p className="mt-1 text-3xl font-bold">
-              {attempt.score} <span className="text-lg font-normal text-slate-400">/ {attempt.totalPoints}</span>
+              {attempt.score}{" "}
+              <span className="text-lg font-normal text-slate-400">
+                / {attempt.totalPoints}
+              </span>
             </p>
           </div>
           <div className="rounded border border-slate-200 bg-white p-5">
             <p className="text-sm text-slate-500">Correct</p>
             <p className="mt-1 text-3xl font-bold">
-              {attempt.correctCount} <span className="text-lg font-normal text-slate-400">/ {attempt.questionCount}</span>
+              {attempt.correctCount}{" "}
+              <span className="text-lg font-normal text-slate-400">
+                / {attempt.questionCount}
+              </span>
             </p>
           </div>
         </section>
 
         <div className="space-y-4">
           {questions.map((question, i) => (
-            <article key={question.id} className="rounded border border-slate-200 bg-white p-5">
+            <article
+              key={question.id}
+              className="rounded border border-slate-200 bg-white p-5"
+            >
               <div className="flex items-baseline justify-between gap-4">
-                <p className="text-xs font-bold uppercase tracking-wide text-slate-400">Question {i + 1}</p>
-                <span className={`text-xs font-bold ${question.isCorrect ? "text-emerald-700" : "text-red-700"}`}>
-                  {question.isCorrect ? "Correct" : "Incorrect"} · {question.earnedPoints}/{question.points}
+                <p className="text-xs font-bold uppercase tracking-wide text-slate-400">
+                  Question {i + 1}
+                </p>
+                <span
+                  className={`text-xs font-bold ${question.isCorrect ? "text-emerald-700" : "text-red-700"}`}
+                >
+                  {question.isCorrect ? "Correct" : "Incorrect"} ·{" "}
+                  {question.earnedPoints}/{question.points}
                 </span>
               </div>
               <h2 className="mt-2 font-bold">{question.text}</h2>
@@ -187,26 +214,37 @@ export default function TakeExam() {
                   return (
                     <li
                       key={o}
-                      className={`flex items-center gap-3 rounded border p-3 text-sm ${isCorrect
+                      className={`flex items-center gap-3 rounded border p-3 text-sm ${
+                        isCorrect
                           ? "border-emerald-300 bg-emerald-50"
                           : isChosen
                             ? "border-red-300 bg-red-50"
                             : "border-slate-200"
-                        }`}
+                      }`}
                     >
                       <span className="grid size-7 shrink-0 place-items-center rounded-full border border-slate-300 text-xs font-bold">
                         {letters[o]}
                       </span>
                       <span className="flex-1">{option}</span>
-                      {isCorrect && <span className="text-xs font-bold text-emerald-700">Correct answer</span>}
-                      {isChosen && !isCorrect && <span className="text-xs font-bold text-red-700">Your answer</span>}
+                      {isCorrect && (
+                        <span className="text-xs font-bold text-emerald-700">
+                          Correct answer
+                        </span>
+                      )}
+                      {isChosen && !isCorrect && (
+                        <span className="text-xs font-bold text-red-700">
+                          Your answer
+                        </span>
+                      )}
                     </li>
                   );
                 })}
               </ul>
 
               {question.selectedOption === null && (
-                <p className="mt-3 text-xs font-semibold text-slate-500">You did not answer this question.</p>
+                <p className="mt-3 text-xs font-semibold text-slate-500">
+                  You did not answer this question.
+                </p>
               )}
             </article>
           ))}
@@ -227,110 +265,112 @@ export default function TakeExam() {
     if (window.confirm(warning)) submit();
   };
 
+  if (!question)
+    return (
+      <ErrorMessage message="This exam has no questions. Contact your teacher." />
+    );
   return (
-    <>
-      <PageHeader
-        eyebrow={exam?.code || "Exam"}
-        title={exam?.title || "Exam"}
-        description={`${answeredCount} of ${questions.length} answered`}
-        action={
-          <div className="text-right">
-            <p className={`text-3xl font-bold tabular-nums ${low ? "text-red-600" : "text-slate-900"}`}>
-              {secondsLeft === null ? "--:--" : formatClock(secondsLeft)}
-            </p>
-            <p className="text-xs text-slate-500">
-              {saveState === "saving" ? "Saving…" : saveState === "saved" ? "All answers saved" : "Time remaining"}
-            </p>
-          </div>
-        }
-      />
+    <div className="ep-take-exam">
+      <header className="ep-exam-heading">
+        <span>
+          {exam?.title} / {exam?.code}
+        </span>
+        <strong className={low ? "text-red-700" : ""}>
+          {secondsLeft === null ? "--:--" : formatClock(secondsLeft)} remaining
+        </strong>
+      </header>
       <ErrorMessage message={error} />
-
       {low && (
-        <p className="mb-5 rounded border border-red-300 bg-red-50 p-3 text-sm font-semibold text-red-700">
-          Less than five minutes left. The exam submits itself when the timer reaches zero.
+        <p role="status" className="mb-5 text-red-700">
+          Less than five minutes left. The exam submits when time runs out.
         </p>
       )}
-
-      <nav className="mb-5 flex flex-wrap gap-2">
-        {questions.map((q, i) => {
-          const isCurrent = i === index;
-          const isAnswered = answers[q.id] !== undefined;
-          return (
-            <button
-              key={q.id}
-              onClick={() => setIndex(i)}
-              className={`size-10 rounded border text-sm font-bold ${isCurrent
-                  ? "border-violet-700 bg-violet-700 text-white"
-                  : isAnswered
-                    ? "border-violet-300 bg-violet-50 text-violet-700"
-                    : "border-slate-300 bg-white text-slate-500"
-                }`}
-            >
-              {i + 1}
-            </button>
-          );
-        })}
-      </nav>
-
-      <section className="rounded border border-slate-200 bg-white p-6">
-        <p className="text-xs font-bold uppercase tracking-wide text-slate-400">
-          Question {index + 1} of {questions.length} · {question.points}{" "}
-          {question.points === 1 ? "point" : "points"}
-        </p>
-        <h2 className="mt-2 text-lg font-bold">{question.text}</h2>
-
-        <div className="mt-5 space-y-3">
-          {question.options.map((option, i) => {
-            const selected = answers[question.id] === i;
-            return (
+      <div className="ep-exam-grid">
+        <section className="ep-question">
+          <p className="ep-eyebrow">
+            QUESTION {pad(index + 1)} / {pad(questions.length)}
+          </p>
+          <h1>{question.text}</h1>
+          <p className="ep-question-instruction">
+            Select one answer. {question.points}{" "}
+            {question.points === 1 ? "point" : "points"}.
+          </p>
+          <div className="ep-options">
+            {question.options.map((option, i) => (
               <button
                 key={i}
+                aria-pressed={answers[question.id] === i}
+                className={answers[question.id] === i ? "is-selected" : ""}
                 onClick={() => choose(question.id, i)}
-                className={`flex w-full items-center gap-3 rounded border p-3 text-left text-sm ${selected
-                    ? "border-violet-700 bg-violet-50 font-semibold text-violet-900"
-                    : "border-slate-300 bg-white hover:border-slate-400"
-                  }`}
               >
-                <span
-                  className={`grid size-7 shrink-0 place-items-center rounded-full border text-xs font-bold ${selected ? "border-violet-700 bg-violet-700 text-white" : "border-slate-300 text-slate-500"
-                    }`}
-                >
-                  {letters[i]}
-                </span>
-                <span>{option}</span>
+                <span>{letters[i]}</span>
+                {option}
               </button>
-            );
-          })}
-        </div>
-
-        <div className="mt-6 flex flex-wrap justify-between gap-3">
-          <div className="flex gap-3">
+            ))}
+          </div>
+          <div className="ep-question-navigation">
             <button
-              onClick={() => setIndex((i) => i - 1)}
+              className="ep-button ep-button-secondary"
               disabled={index === 0}
-              className="w-28 rounded border border-slate-300 px-4 py-2 text-sm font-semibold disabled:cursor-not-allowed disabled:text-slate-300"
+              onClick={() => setIndex((i) => i - 1)}
             >
               Previous
             </button>
             <button
-              onClick={() => setIndex((i) => i + 1)}
+              className="ep-button"
               disabled={index === questions.length - 1}
-              className="w-28 rounded border border-slate-300 px-4 py-2 text-sm font-semibold disabled:cursor-not-allowed disabled:text-slate-300"
+              onClick={() => setIndex((i) => i + 1)}
             >
-              Next
+              Next question
             </button>
           </div>
-
-          <button
-            onClick={confirmSubmit}
-            disabled={submitting}
-            className="rounded bg-violet-700 px-5 py-2 text-sm font-bold text-white disabled:bg-slate-300"
-          >
-            {submitting ? "Submitting…" : "Submit exam"}
-          </button>
-        </div>
-      </section>
-    </>
+        </section>
+        <aside className="ep-exam-progress">
+          <h2>Your progress</h2>
+          <p>
+            {answeredCount} of {questions.length} answered
+          </p>
+          <nav aria-label="Question navigation">
+            {questions.map((q, i) => (
+              <button
+                key={q.id}
+                aria-label={`Question ${i + 1}${answers[q.id] !== undefined ? ", answered" : ""}`}
+                aria-current={i === index ? "step" : undefined}
+                className={
+                  i === index
+                    ? "is-current"
+                    : answers[q.id] !== undefined
+                      ? "is-answered"
+                      : ""
+                }
+                onClick={() => setIndex(i)}
+              >
+                {pad(i + 1)}
+              </button>
+            ))}
+          </nav>
+          <div className="ep-divider" />
+          <p role="status">
+            {saveState === "saving"
+              ? "Saving…"
+              : saveState === "saved"
+                ? "All answers saved."
+                : "Answers save automatically."}
+            <br />
+            The exam submits when time runs out.
+          </p>
+          <div className="ep-submit">
+            <button
+              className="ep-button ep-button-secondary"
+              disabled={submitting}
+              onClick={confirmSubmit}
+            >
+              {submitting ? "Submitting…" : "Submit exam"}
+            </button>
+            <small>You can review before submitting.</small>
+          </div>
+        </aside>
+      </div>
+    </div>
   );
 }

@@ -82,15 +82,6 @@ npm run preview
 
 The production files are generated in `dist/`. Deploy them to a web server or virtual machine and configure the server to return `index.html` for client-side routes.
 
-## Screenshots
-
-Add the final production screenshots to `docs/screenshots/`, then replace the entries below with the corresponding image files.
-
-- Teacher dashboard
-- Question bank and exam management
-- Student dashboard
-- Timed examination page
-- Examination result page
 
 ## Current project scope
 

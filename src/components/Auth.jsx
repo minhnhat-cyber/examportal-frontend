@@ -77,7 +77,7 @@ export function Login() {
       <section className="ep-login-identity">
         <Brand inverse />
         <div className="ep-login-story">
-          <small>EXAMPORTAL / SEMESTER 1</small>
+          <small>EXAMPORTAL</small>
           <h1>
             Your next exam.
             <br />
